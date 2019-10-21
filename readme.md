@@ -1,3 +1,154 @@
+# Endpoints de la aplicación en Producción
+
+## Usuarios
+
+| Feature | URL | Method |
+| ------- | --- | ------ |
+| Crear usuario | `/api/auth/users/` | POST
+
+Requiere los siguientes datos:
+
+```json
+{
+  "username":"nombreusuario",
+  "password":"password",
+  "email":"prueba@prueba.com"
+}
+```
+devuelve:
+
+```json
+{
+  "email": "prueba@prueba.com",
+  "username": "nombreusuario",
+  "id": 5
+}
+```
+
+| Feature | URL | Method |
+| ------- | --- | ------ |
+| Login usuario | `/api/auth/token/login/` | POST
+
+Requiere los siguientes datos:
+
+```json
+{
+  "username":"nombreusuario",
+  "password":"password"
+}
+```
+devuelve:
+
+```json
+{
+  "auth_token": "7fcfa62771ac2fd7c085c37db2f088528dbc42ee"
+}
+```
+
+ Feature | URL | Method |
+| ------- | --- | ------ |
+| Logout usuario | `/api/auth/token/logout/` | POST
+
+Requiere la siguiente cabecera:
+
+```
+-H 'Authorization: Token b704c9fc3655635646356ac2950269f352ea1139'
+```
+No devuelve respuesta
+
+| Feature | URL | Method |
+| ------- | --- | ------ |
+| Sacar datos de un usuario | `/api/auth/users/me/` | GET
+
+Requiere haber hecho login primero y pasar el token en la cabecera:
+
+```
+-H 'Authorization: Token b704c9fc3655635646356ac2950269f352ea1139'
+```
+devuelve:
+
+```json
+{
+  "email": "prueba@prueba.com",
+  "username": "nombreusuario",
+  "id": 5
+}
+```
+
+| Feature | URL | Method |
+| ------- | --- | ------ |
+| Articulos | `articulos/` | GET POST
+
+### [Método GET]
+
+Requiere haber hecho login primero y pasar el token en la cabecera:
+
+```
+-H 'Authorization: Token b704c9fc3655635646356ac2950269f352ea1139'
+```
+devuelve:
+
+```json
+[
+  {
+    "id": 1,
+    "titulo": "Articulo 1",
+    "texto_introduccion": "Prueba texto"
+  },
+  {
+    "id": 2,
+    "titulo": "Articulo 2",
+    "texto_introduccion": "Prueba texto"
+  }
+]
+```
+### [Método POST]
+
+Requiere haber hecho login primero y pasar el token en la cabecera:
+
+```
+-H 'Authorization: Token b704c9fc3655635646356ac2950269f352ea1139'
+```
+Requiere envío de datos:
+
+```json
+{
+  "titulo":"Articulo 2",
+  "texto_introduccion":"Prueba texto",
+	"contenido":"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+	"estado":"PUB",
+	"usuario":5		
+}
+```
+estos datos están basados en el modelo que de momento es asì:
+
+```python
+class Article(models.Model):
+    BORRADOR = 'DRF'
+    PUBLICADO = 'PUB'
+
+    ESTADO = [
+        [BORRADOR, 'Borrador'],
+        [PUBLICADO, 'Publicado']
+    ]
+
+    titulo = models.CharField(max_length=150);
+    texto_introduccion = models.TextField(null=True, blank=True)
+    contenido = models.TextField()
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    fecha_modificacion = models.DateTimeField(auto_now=True)
+    fecha_publicacion = models.DateTimeField(null=True, blank=True, default=datetime.datetime.now())
+    estado =  models.CharField(max_length=3, choices=ESTADO, default=BORRADOR)
+    usuario = models.ForeignKey(User, related_name='articulos', on_delete=models.CASCADE)
+    imagen = models.URLField(default='http://ella.practicalaction.org/wp-content/themes/ella/images/no-photo.png')
+    video = models.URLField(null=True, blank=True)
+
+    def __str__(self):
+        return self.titulo
+```
+De momento el usuario no se auto asigna al que tiene el login pero supongo que entre otras arreglare hoy cosas parecidas. Me gustaría dejar el PUT hecho para modificar y el DELETE.
+
+
 # Importación del proyecto a local con pyCharm
 
 - Hacemos un fetch con git del repositorio
