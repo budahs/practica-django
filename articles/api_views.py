@@ -1,10 +1,17 @@
-from rest_framework import viewsets
-from . import models
-from . import serializers
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+
+from articles.models import Article
+from articles.serializers import ArticleListSerializer, ArticleSerializer
 
 
-class ArticleViewSet(viewsets.ModelViewSet):
-    queryset = models.Article.objects.all()
+class ArticleViewSet(ListCreateAPIView):
+
+    queryset = Article.objects.all()
 
     def get_serializer_class(self):
-        return serializers.ArticleListSerializer if self.request.method == 'GET' else serializers.ArticleSerializer
+        return ArticleListSerializer if self.request.method == 'GET' else ArticleSerializer
+
+class ArticleDetail(RetrieveUpdateDestroyAPIView):
+
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
