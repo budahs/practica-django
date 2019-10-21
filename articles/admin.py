@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+# Custom models registration
+from articles.models import Article
+
+admin.site.register(Article)
+

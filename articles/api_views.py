@@ -5,4 +5,6 @@ from . import serializers
 
 class ArticleViewSet(viewsets.ModelViewSet):
     queryset = models.Article.objects.all()
-    serializer_class = serializers.ArticleSerializer
+
+    def get_serializer_class(self):
+        return serializers.ArticleListSerializer if self.request.method == 'GET' else serializers.ArticleSerializer

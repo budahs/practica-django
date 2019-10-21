@@ -94,7 +94,7 @@ WSGI_APPLICATION = 'main.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
-    'default': env.db()
+    'default': env.db('SQLITE_URL')
 }
 
 '''
