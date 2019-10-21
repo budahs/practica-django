@@ -24,4 +24,4 @@ class Article(models.Model):
     video = models.URLField(null=True, blank=True)
 
     def __str__(self):
-        return self.title
+        return self.titulo
