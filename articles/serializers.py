@@ -21,4 +21,4 @@ class ArticleSerializer(ModelSerializer):
                   'imagen',
                   'video'
                   ]
-        read_only_fields = ['id', 'fecha_creacion', 'fecha_modificacion']
+        read_only_fields = ['id', 'fecha_creacion', 'fecha_modificacion', 'usuario']
