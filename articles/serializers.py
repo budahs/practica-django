@@ -1,12 +1,13 @@
-from rest_framework import serializers
+from rest_framework.serializers import ModelSerializer
+
 from . import models
 
-class ArticleListSerializer(serializers.ModelSerializer):
+class ArticleListSerializer(ModelSerializer):
     class Meta:
         model = models.Article
         fields = ['id','titulo','texto_introduccion']
 
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer(ModelSerializer):
     class Meta:
         model = models.Article
         fields = ['id',
@@ -20,4 +21,4 @@ class ArticleSerializer(serializers.ModelSerializer):
                   'imagen',
                   'video'
                   ]
-        read_only_fields = ['id', 'fecha_creacion', 'fecha_modificacion']
+        read_only_fields = ['id', 'fecha_creacion', 'fecha_modificacion', 'usuario']
