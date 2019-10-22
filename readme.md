@@ -81,27 +81,87 @@ devuelve:
 
 ### [Método GET]
 
-Requiere haber hecho login primero y pasar el token en la cabecera:
+- Requiere haber hecho login primero y pasar el token en la cabecera.
+- Los artículos que se muestran son sólo los publicados [PUB].
+- Los artículos se ordenan por fecha de modificación.
 
 ```
 -H 'Authorization: Token b704c9fc3655635646356ac2950269f352ea1139'
 ```
-devuelve:
+devuelve artículos paginados:
 
 ```json
-[
-  {
-    "id": 1,
-    "titulo": "Articulo 1",
-    "texto_introduccion": "Prueba texto"
-  },
-  {
-    "id": 2,
-    "titulo": "Articulo 2",
-    "texto_introduccion": "Prueba texto"
-  }
-]
+{
+  "count": 3,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 1,
+      "titulo": "Articulo 1",
+      "texto_introduccion": "Prueba texto"
+    },
+    {
+      "id": 2,
+      "titulo": "Articulo 2",
+      "texto_introduccion": "Prueba texto"
+    },
+    {
+      "id": 3,
+      "titulo": "Articulo 2",
+      "texto_introduccion": "Prueba texto"
+    }
+  ]
+}
 ```
+### [Búsqueda de artículos por usuario]
+
+| Feature | URL | Method |
+| ------- | --- | ------ |
+| Articulos | `articulos/?usuario=id` | GET
+
+Ejemplo:
+
+http://api.elmoribundogarci.com/articulos/?usuario=5
+
+Permite búsquedas por los siguientes parámetros:
+
+```python
+fields = {
+            'titulo' : ['contains'],
+            'usuario' : ['exact'],
+            'fecha_creacion' : ['gte', 'lt', 'contains'],
+            'estado' : ['exact']
+        }
+```
+No pongo ejemplos porque no creo que vayamos a implementar esto
+
+---
+
+| Feature | URL | Method |
+| ------- | --- | ------ |
+| Detalle de artículo | `articulos/<id>` | GET POST PATCH PUT DELETE
+
+### [Método GET]
+
+Todos
+
+### [Método POST|PATCH|PUT|DELETE]
+
+Requiere haber hecho login primero y pasar el token en la cabecera. Sólo el usuario creador del artículo y un super usuario podra hacer tareas de edición (POST|PATCH|PUT|DELETE).
+
+El [id] se autoasigna al id del usuario logado incluso si se especifica.
+
+los campos de [fecha_creacion], [fecha_modificacion], [fecha_publicacion] se autoasignan de no enviarlos.
+
+De lo contrario nos devolverá:
+
+```json
+{
+  "detail": "You do not have permission to perform this action."
+}
+```
+
 ### [Método POST]
 
 Requiere haber hecho login primero y pasar el token en la cabecera:
