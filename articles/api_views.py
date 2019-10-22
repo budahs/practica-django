@@ -1,6 +1,7 @@
 from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 from django_filters import rest_framework as filters
+from rest_framework.filters import OrderingFilter
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
@@ -32,8 +33,9 @@ class ArticleViewSet(ArticleList, ListCreateAPIView):
 
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Article.objects.all()
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend,OrderingFilter]
     filter_class = ArticleFilter
+    ordering_filters = ['id','titulo']
 
     def get_serializer_class(self):
         return ArticleListSerializer if self.request.method == 'GET' else ArticleSerializer
