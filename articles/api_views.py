@@ -2,12 +2,13 @@ from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 from django_filters import rest_framework as filters
 from rest_framework.filters import OrderingFilter
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
 
-from articles.models import Article
+from articles.models import Article, Category
 from articles.permissions import ArticlePermission
-from articles.serializers import ArticleListSerializer, ArticleSerializer
+from articles.serializers import ArticleListSerializer, ArticleSerializer, CategoryListSerializer
+
 
 class ArticleFilter(filters.FilterSet):
 
@@ -28,6 +29,13 @@ class ArticleList(object):
         elif not self.request.user.is_superuser:
             queryset = queryset.filter(Q(estado=Article.PUBLICADO) | Q(usuario=self.request.user))
         return queryset
+
+class CategoryListView(ListAPIView):
+    permission_classes = [AllowAny]
+    queryset = Category.objects.all()
+
+    def get_serializer_class(self):
+        return CategoryListSerializer
 
 class ArticleViewSet(ArticleList, ListCreateAPIView):
 

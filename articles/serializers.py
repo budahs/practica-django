@@ -2,7 +2,14 @@ from rest_framework.serializers import ModelSerializer
 
 from . import models
 
+class CategoryListSerializer(ModelSerializer):
+
+    class Meta:
+        model = models.Category
+        fields = ['id','nombre','slug']
+
 class ArticleListSerializer(ModelSerializer):
+
     class Meta:
         model = models.Article
         fields = ['id','titulo','texto_introduccion']
