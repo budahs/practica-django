@@ -22,9 +22,9 @@ class ArticleFilter(filters.FilterSet):
 
 class ArticleList(object):
     def get_queryset(self):
-        queryset = Article.objects.select_related('usuario').order_by('fecha_modificacion')
+        queryset = Article.objects.select_related('usuario').order_by('-fecha_modificacion')
         if not self.request.user.is_authenticated:
-            queryset = queryset.filter(estado=Article.estado)
+            queryset = queryset.filter(estado=Article.PUBLICADO)
         elif not self.request.user.is_superuser:
             queryset = queryset.filter(Q(estado=Article.PUBLICADO) | Q(usuario=self.request.user))
         return queryset
