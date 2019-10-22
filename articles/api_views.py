@@ -31,8 +31,11 @@ class ArticleList(object):
         return queryset
 
 class CategoryListView(ListAPIView):
+
     permission_classes = [AllowAny]
     queryset = Category.objects.all()
+    filter_backends = [OrderingFilter]
+    ordering_filters = ['nombre']
 
     def get_serializer_class(self):
         return CategoryListSerializer
