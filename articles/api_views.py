@@ -46,7 +46,7 @@ class ArticleViewSet(ArticleList, ListCreateAPIView):
     queryset = Article.objects.all()
     filter_backends = [DjangoFilterBackend,OrderingFilter]
     filter_class = ArticleFilter
-    ordering_filters = ['id','titulo']
+    ordering_filters = ['id','titulo','imagen']
 
     def get_serializer_class(self):
         return ArticleListSerializer if self.request.method == 'GET' else ArticleSerializer
