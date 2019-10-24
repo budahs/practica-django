@@ -1,4 +1,5 @@
 from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
 
 from . import models
 
@@ -10,11 +11,15 @@ class CategoryListSerializer(ModelSerializer):
 
 class ArticleListSerializer(ModelSerializer):
 
+    nombre = serializers.CharField(source='usuario.username')
+    nombre_categoria = serializers.CharField(source='categoria.nombre')
+
     class Meta:
         model = models.Article
-        fields = ['id','titulo','texto_introduccion']
+        fields = ['id','titulo','texto_introduccion','imagen','usuario','nombre','fecha_creacion','categoria','nombre_categoria','contenido']
 
 class ArticleSerializer(ModelSerializer):
+
     class Meta:
         model = models.Article
         fields = ['id',
@@ -26,6 +31,7 @@ class ArticleSerializer(ModelSerializer):
                   'estado',
                   'usuario',
                   'imagen',
-                  'video'
+                  'video',
+                  'categoria'
                   ]
         read_only_fields = ['id', 'fecha_creacion', 'fecha_modificacion', 'usuario']
